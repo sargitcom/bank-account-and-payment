@@ -1,0 +1,10 @@
+services:
+
+  ifx-php-apache:
+    build:
+      context: .
+      dockerfile: ./docker/php-apache/Dockerfile
+    ports:
+      - "10000:80"
+    volumes:
+      - ./src:/var/www/html
