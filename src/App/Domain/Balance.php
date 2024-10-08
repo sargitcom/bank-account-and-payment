@@ -25,9 +25,8 @@ class Balance implements Iterator
     }
 
     /** @throws Exception */
-    public function addTransaction(Payment $payment): void
+    public function makeTransaction(Payment $payment): void
     {
-        /*
         $this->assertCurrencyMatch($payment->getCurrency());
         if ($this->isDebitPayment($payment)) {
             $payment = new FeeDecorator($payment);
@@ -47,7 +46,12 @@ class Balance implements Iterator
 
         $this->appendTransaction($payment);
         $this->setBalance($payment);
-        */
+    }
+
+    public function addTransaction(Payment $payment): void
+    {
+        $this->appendTransaction($payment);
+        $this->setBalance($payment);
     }
 
     private function appendTransaction(Payment $payment): void
@@ -89,6 +93,11 @@ class Balance implements Iterator
     public function current(): Payment
     {
         return $this->data[$this->index];
+    }
+
+    public function getCurrentPaymentDate(): string
+    {
+        return $this->current()->getPaymentDate();
     }
 
     public function next(): void

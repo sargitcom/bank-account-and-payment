@@ -8,6 +8,8 @@ use InvalidArgumentException;
 
 class DebitPayment extends Payment
 {
+    public const PAYMENT_TYPE = 'DEBIT';
+
     public function __construct(
         AbstractCurrency $currency,
         Amount           $amount,
@@ -24,5 +26,10 @@ class DebitPayment extends Payment
         }
 
         throw new InvalidArgumentException("Credit amount $amount is greater than zero");
+    }
+
+    public function getPaymentType(): string
+    {
+        return self::PAYMENT_TYPE;
     }
 }

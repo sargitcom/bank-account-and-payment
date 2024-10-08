@@ -8,6 +8,8 @@ use InvalidArgumentException;
 
 class CreditPayment extends Payment
 {
+    public const PAYMENT_TYPE = 'CREDIT';
+
     public function __construct(
         AbstractCurrency $currency,
         Amount           $amount,
@@ -24,5 +26,10 @@ class CreditPayment extends Payment
         }
 
         throw new InvalidArgumentException("Credit amount $amount is not greater than zero");
+    }
+
+    public function getPaymentType(): string
+    {
+        return self::PAYMENT_TYPE;
     }
 }

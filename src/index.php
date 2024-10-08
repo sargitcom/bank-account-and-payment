@@ -4,7 +4,7 @@ require_once 'vendor/autoload.php';
 
 $accountCurrency = new App\Domain\Currency\PlnCurrency();
 
-$paymentService = new \App\Application\PaymentService();
+$paymentService = new \Tests\Integration\PaymentService();
 
 # first payment
 $accountBalance = new App\Domain\Balance($accountCurrency);
