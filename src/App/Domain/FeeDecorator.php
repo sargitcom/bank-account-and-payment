@@ -27,7 +27,7 @@ class FeeDecorator extends Payment
 
     public function getAmount(): float
     {
-        return $this->payment->getAmount() + $this->fee->getFee($this->payment->getAmount());
+        return $this->payment->getAmount() - $this->fee->getFee($this->payment->getAmount());
     }
 
     public function getPaymentType(): string

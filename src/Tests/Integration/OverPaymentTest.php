@@ -2,7 +2,7 @@
 
 namespace Tests\Integration;
 
-use App\Domain\Account;
+use App\Application\AccountService;
 use App\Domain\Amount;
 use App\Domain\Balance;
 use App\Domain\CreditPayment;
@@ -18,16 +18,15 @@ class OverPaymentTest extends TestCase
      */
     public function testOverPayment(): void
     {
+        $this->expectException(Exception::class);
+
         $accountCurrency = new PlnCurrency();
         $balance = new Balance($accountCurrency);
-        $account = new Account($accountCurrency, $balance);
-
+        $accountService = new AccountService($accountCurrency, $balance);
         $payment1 = new CreditPayment($accountCurrency, Amount::create(PHP_FLOAT_MAX), new DateTime());
-        $payment2 = new CreditPayment($accountCurrency, Amount::create(100), new DateTime());
+        $payment2 = new CreditPayment($accountCurrency, Amount::create(1000), new DateTime());
 
-        $account->makePayment($payment1);
-        $account->makePayment($payment2);
-
-        $this->expectException(Exception::class);
+        $accountService->makePayment($payment1);
+        $accountService->makePayment($payment2);
     }
 }

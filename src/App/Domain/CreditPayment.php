@@ -25,7 +25,7 @@ class CreditPayment extends Payment
             return;
         }
 
-        throw new InvalidArgumentException("Credit amount $amount is not greater than zero");
+        throw new InvalidArgumentException("Credit amount $amount is less than zero");
     }
 
     public function getPaymentType(): string

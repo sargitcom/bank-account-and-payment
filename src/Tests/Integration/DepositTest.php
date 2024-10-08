@@ -2,7 +2,7 @@
 
 namespace Tests\Integration;
 
-use App\Domain\Account;
+use App\Application\AccountService;
 use App\Domain\Amount;
 use App\Domain\Balance;
 use App\Domain\CreditPayment;
@@ -14,8 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class DepositTest extends TestCase
 {
-    private const AMOUNT = 10000000;
-
     /**
      * @throws Exception
      */
@@ -23,16 +21,17 @@ class DepositTest extends TestCase
     {
         $accountCurrency = new PlnCurrency();
         $balance = new Balance($accountCurrency);
-        $account = new Account($accountCurrency, $balance);
-        $this->makeDeposit($accountCurrency, $account);
-        $this->assertEquals(self::AMOUNT, $account->getAmount());
+        $accountService = new AccountService($accountCurrency, $balance);
+
+        $this->makeDeposit($accountCurrency, $accountService);
+        $this->assertEquals(10000000.0, $accountService->getAccountAmount());
     }
 
     /**
      * @throws Exception
      */
-    private function makeDeposit(AbstractCurrency $accountCurrency, Account $account): void
+    private function makeDeposit(AbstractCurrency $accountCurrency, AccountService $accountService): void
     {
-        $account->makePayment(new CreditPayment($accountCurrency, Amount::create(self::AMOUNT), new DateTime()));
+        $accountService->makePayment(new CreditPayment($accountCurrency, Amount::create(10000000.0), new DateTime()));
     }
 }

@@ -35,11 +35,11 @@ class Amount
 
     private function setAmount(float $amount): void
     {
-        $this->amount = round($amount, 4);
+        $this->amount = $amount;
     }
 
     public function getAmount(): float
     {
-        return round($this->amount, 2);
+        return $this->amount;
     }
 }

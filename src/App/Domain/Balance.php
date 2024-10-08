@@ -5,6 +5,7 @@ namespace App\Domain;
 use App\Domain\Currency\AbstractCurrency;
 use Exception;
 use Iterator;
+use PhpParser\Node\Expr\Variable;
 
 class Balance implements Iterator
 {
@@ -28,6 +29,7 @@ class Balance implements Iterator
     public function makeTransaction(Payment $payment): void
     {
         $this->assertCurrencyMatch($payment->getCurrency());
+
         if ($this->isDebitPayment($payment)) {
             $payment = new FeeDecorator($payment);
 
@@ -77,17 +79,17 @@ class Balance implements Iterator
 
     private function isDebitPayment(Payment $payment): bool
     {
-        return is_a($payment, DebitPayment::class);
+        return $payment->getPaymentType() === DebitPayment::PAYMENT_TYPE;
     }
 
     private function isEnoughAmount(Payment $payment): bool
     {
-        return $this->balanceAmount >= $payment->getAmount();
+        return $this->balanceAmount + $payment->getAmount() >= 0;
     }
 
     private function canDepositAmount(Payment $payment): bool
     {
-        return $this->balanceAmount <= PHP_FLOAT_MAX - $payment->getAmount();
+        return $payment->getAmount() <= PHP_FLOAT_MAX -  $this->balanceAmount;
     }
 
     public function current(): Payment

@@ -25,7 +25,7 @@ class DebitPayment extends Payment
             return;
         }
 
-        throw new InvalidArgumentException("Credit amount $amount is greater than zero");
+        throw new InvalidArgumentException("Debit amount $amount is greater than zero");
     }
 
     public function getPaymentType(): string

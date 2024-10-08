@@ -3,6 +3,7 @@
 namespace App\Domain;
 
 use App\Domain\Currency\AbstractCurrency;
+use App\Domain\Exception\TooManyWithdrawsException;
 use Exception;
 
 class Account
@@ -43,7 +44,7 @@ class Account
     private function throwMaxPaymentMadeException()
     {
         $maxWithdrawNumber = self::MAX_WITHDRAW_NUMBER;
-        throw new Exception("Can`t withdraw deposit. Over number of withdraw: $maxWithdrawNumber");
+        throw new TooManyWithdrawsException("Can`t withdraw deposit. Over number of withdraw: $maxWithdrawNumber");
     }
 
     private function isDebitPayment(Payment $payment): bool
@@ -76,7 +77,7 @@ class Account
         return $this->paymentsCount[$paymentDate] < self::MAX_WITHDRAW_NUMBER;
     }
 
-    public function getAmount(): string
+    public function getAmount(): float
     {
         return $this->balance->getAmount();
     }

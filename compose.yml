@@ -1,6 +1,7 @@
 services:
 
   ifx-php-apache:
+    container_name: ifx-php-apache
     build:
       context: .
       dockerfile: ./docker/php-apache/Dockerfile

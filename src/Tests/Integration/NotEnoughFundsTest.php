@@ -2,7 +2,7 @@
 
 namespace Tests\Integration;
 
-use App\Domain\Account;
+use App\Application\AccountService;
 use App\Domain\Amount;
 use App\Domain\Balance;
 use App\Domain\CreditPayment;
@@ -20,27 +20,29 @@ class NotEnoughFundsTest extends TestCase
      */
     public function testNotEnoughFunds(): void
     {
+        $this->expectException(Exception::class);
+
         $accountCurrency = new PlnCurrency();
         $balance = new Balance($accountCurrency);
-        $account = new Account($accountCurrency, $balance);
-        $this->makeDeposit($accountCurrency, $account);
-        $this->tryToWithdraw($accountCurrency, $account);
-        $this->expectException(Exception::class);
+        $accountService = new AccountService($accountCurrency, $balance);
+
+        $this->makeDeposit($accountCurrency, $accountService);
+        $this->tryToWithdraw($accountCurrency, $accountService);
     }
 
     /**
      * @throws Exception
      */
-    private function makeDeposit(AbstractCurrency $accountCurrency, Account $account): void
+    private function makeDeposit(AbstractCurrency $accountCurrency, AccountService $accountService): void
     {
-        $account->makePayment(new CreditPayment($accountCurrency, Amount::create(10000), new DateTime()));
+        $accountService->makePayment(new CreditPayment($accountCurrency, Amount::create(10000.0), new DateTime()));
     }
 
     /**
      * @throws Exception
      */
-    private function tryToWithdraw(AbstractCurrency $accountCurrency, Account $account): void
+    private function tryToWithdraw(AbstractCurrency $accountCurrency, AccountService $accountService): void
     {
-        $account->makePayment(new DebitPayment($accountCurrency, Amount::create(20000), new DateTime()));
+        $accountService->makePayment(new DebitPayment($accountCurrency, Amount::create(-20000.0), new DateTime()));
     }
 }
